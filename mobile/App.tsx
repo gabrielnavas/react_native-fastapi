@@ -2,7 +2,6 @@ import 'react-native-gesture-handler';
 
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View, Text, Button } from 'react-native';
 
 
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -12,9 +11,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import CreateProduct from './src/screen/CreateProduct';
 import SearchProduct from './src/screen/SearchProduct';
 import UpdateProduct from './src/screen/UpdateProduct';
+import SignUp from './src/screen/SignUp';
+import SignIn from './src/screen/SignIn';
 
 const DrawerApp = createDrawerNavigator();
 const StackSearchProduct = createStackNavigator();
+const StackAuthentication = createStackNavigator();
 
 const SearchProductStack = () => {
   return (
@@ -29,8 +31,7 @@ const SearchProductStack = () => {
   );
 }
 
-
-function DrawerComponent() {
+function ProductDrawer() {
   return (
     <DrawerApp.Navigator screenOptions={{
       drawerStyle: {
@@ -48,11 +49,28 @@ function DrawerComponent() {
 }
 
 
+const AuthenticationStack = () => {
+  return (
+    <StackAuthentication.Navigator>
+      <StackAuthentication.Screen name="SignUp" component={SignUp} options={{
+        title: 'Novo usuário',
+        headerLeft: () => null
+      }} />
+      <StackAuthentication.Screen name="SignIn" component={SignIn} options={{
+        title: 'Realizar login',
+        headerLeft: () => null
+      }} />
+      <StackAuthentication.Screen name="ProductDrawer" component={ProductDrawer} />
+    </StackAuthentication.Navigator>
+  );
+}
+
+
 export default function App() {
   return (
     <NavigationContainer>
       <StatusBar style="auto" />
-      <DrawerComponent />
+      <AuthenticationStack />
     </NavigationContainer>
   );
 }
