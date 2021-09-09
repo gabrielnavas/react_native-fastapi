@@ -1,33 +1,24 @@
 from typing import Optional
 
-from fastapi import FastAPI, Response, status
+from fastapi import APIRouter, Response, status
 from pydantic import BaseModel
 
-from fastapi.middleware.cors import CORSMiddleware
 
-from modules.create_product import make_create_product_usecase 
-from modules.search_product import make_search_product_usecase 
-from modules.delete_product import make_delete_product_usecase 
+from modules.create_product import make_create_product_usecase
+from modules.search_product import make_search_product_usecase
+from modules.delete_product import make_delete_product_usecase
 from modules.update_product import make_update_product_usecase
 
-app = FastAPI()
 
-origins = ["*"]
+route = APIRouter()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 class PostProductBody(BaseModel):
     name: str
 
-@app.post("/product")
+
+@route.post("/product")
 def create_product(product: PostProductBody, response: Response):
-    
     try:
         product_usecase = make_create_product_usecase()
         product = product_usecase.create(product.name)
@@ -37,7 +28,8 @@ def create_product(product: PostProductBody, response: Response):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return {'message': 'server error'}
 
-@app.get("/product")
+
+@route.get("/product")
 def get_product(response: Response, name: str):
     try:
         usecase = make_search_product_usecase()
@@ -50,7 +42,8 @@ def get_product(response: Response, name: str):
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         return {'message': 'server error'}
 
-@app.delete("/product")
+
+@route.delete("/product")
 def delete_product(response: Response, id: str):
     try:
         print(id)
@@ -66,7 +59,8 @@ class UpdateProductBody(BaseModel):
     id: str
     name: str
 
-@app.put("/product")
+
+@route.put("/product")
 def update_product(response: Response, product: UpdateProductBody):
 
     try:
