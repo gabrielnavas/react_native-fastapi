@@ -25,4 +25,17 @@ CREATE TABLE public.product (
 ALTER TABLE public.product OWNER TO postgres;
 -- ddl-end --
 
+-- object: public."user" | type: TABLE --
+-- DROP TABLE IF EXISTS public."user" CASCADE;
+CREATE TABLE public."user" (
+	id varchar(100) NOT NULL,
+	email varchar(100) NOT NULL,
+	password varchar(100) NOT NULL,
+	CONSTRAINT user_pk PRIMARY KEY (id)
+
+);
+-- ddl-end --
+ALTER TABLE public."user" OWNER TO postgres;
+-- ddl-end --
+
 
